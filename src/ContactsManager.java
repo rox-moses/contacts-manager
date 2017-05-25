@@ -97,7 +97,6 @@ public class ContactsManager {
 				default:
 					readFile(dataFile, contactName, contactNumber);
 		}
-
 	}
 
 	public static void readFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
