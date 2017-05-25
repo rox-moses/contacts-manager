@@ -38,6 +38,7 @@ public class ContactsManager {
 
 
 		int menuOption = scanner.nextInt();
+		scanner.nextLine();
 
 		switch (menuOption) {
 			case 1:
@@ -45,7 +46,13 @@ public class ContactsManager {
 				for (String contact : contacts) {
 					System.out.println(contact);
 				}
-
+			case 2:
+				System.out.println("Enter your contacts name:");
+				String contactName = scanner.nextLine();
+				System.out.println("Enter contact phone number");
+				int contactNumber = scanner.nextInt();
+				scanner.nextLine();
+				System.out.println(contactName + " " + contactNumber);
 		}
 	}
 
