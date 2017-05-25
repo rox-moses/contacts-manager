@@ -44,7 +44,7 @@ public class ContactsManager {
 		int menuOption = scanner.nextInt();
 		scanner.nextLine();
 
-
+		readFile(dataFile, contactName, contactNumber);
 
 		switch (menuOption) {
 			case 1:
@@ -68,26 +68,32 @@ public class ContactsManager {
 			case 3:
 				System.out.println("Enter contact name: ");
 
-				for (int i=0; i< contactName.size(); i++) {
-					if(contactName.get(i).equalsIgnoreCase(scanner.nextLine())) {
+				for (int i = 0; i < contactName.size(); i++) {
+					if (contactName.get(i).equalsIgnoreCase(scanner.nextLine())) {
 						System.out.println("Contact phone number: " + contactNumber.get(i));
 						break;
 					} else {
 						System.out.println("we don't know that person");
 					}
 				}
-
+				break;
+			case 4:
+				readFile(dataFile, contactName, contactNumber);
+				break;
 		}
 	}
 
-	public List<String> readFile(Path dataFile) throws IOException {
-		return Files.readAllLines(dataFile);
+	public static void readFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
+		List<String> contacts = Files.readAllLines(dataFile);
+		for (String contact : contacts) {
+			contactName.add(contact.split(" | ")[0]);
+			contactNumber.add(contact.split(" | ")[1]);
+		}
 	}
 
-	public void writeFile(Path dataFile, String infoToAdd) throws IOException {
+	public static void writeFile(Path dataFile, String infoToAdd) throws IOException {
 		Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
 	}
-
 
 
 }
