@@ -75,7 +75,6 @@ public class ContactsManager {
 					} else {
 						System.out.println("we don't know that person");
 					}
-
 				}
 
 		}
