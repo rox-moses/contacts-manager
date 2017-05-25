@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -16,6 +17,7 @@ public class ContactsManager {
 	public static void main(String[] args) throws IOException {
 		String directory = "info";
 		String filename = "contacts.txt";
+		List<String> contactName = new ArrayList<>(), contactNumber = new ArrayList<>();
 
 		Path dataDirectory = Paths.get(directory);
 		Path dataFile = Paths.get(directory, filename);
@@ -42,23 +44,47 @@ public class ContactsManager {
 		int menuOption = scanner.nextInt();
 		scanner.nextLine();
 
+
+
 		switch (menuOption) {
 			case 1:
 				List<String> contacts = Files.readAllLines(dataFile);
 				for (String contact : contacts) {
 					System.out.println(contact);
 				}
+				break;
 			case 2:
 				System.out.println("Enter your contacts name:");
-				String contactName = scanner.nextLine();
+				contactName.add(scanner.nextLine());
 				System.out.println("Enter contact phone number");
-				int contactNumber = scanner.nextInt();
-				scanner.nextLine();
+				contactNumber.add(scanner.nextLine());
+
+				System.out.println(contactName.get(0) + contactNumber.get(0));
 
 //				Creates local variable that contactenates contact info to be passed into the file
-				String infoToAdd = contactName + " | " + contactNumber;
-				Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
+//				String infoToAdd = contactName + " | " + contactNumber;
+//				Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
+				break;
+			case 3:
+				System.out.println("Enter contact name: ");
+
+				for (int i=0; i< contactName.size(); i++) {
+					if(contactName.get(i).equalsIgnoreCase(scanner.nextLine())) {
+						System.out.println("Contact phone number: " + contactNumber.get(i));
+						break;
+					} else {
+						System.out.println("we don't know that person");
+					}
+
+				}
+
 		}
 	}
+
+	public List<String> readFile(Path dataFile) throws IOException {
+		return Files.readAllLines(dataFile);
+	}
+
+
 
 }
