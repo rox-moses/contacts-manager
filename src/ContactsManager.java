@@ -43,6 +43,7 @@ public class ContactsManager {
 
 		int menuOption = scanner.nextInt();
 		scanner.nextLine();
+		String searchingContact = scanner.nextLine();
 
 		readFile(dataFile, contactName, contactNumber);
 
@@ -68,9 +69,9 @@ public class ContactsManager {
 				break;
 			case 3:
 				System.out.println("Enter contact name: ");
-
+				searchingContact = scanner.nextLine();
 				for (int i = 0; i < contactName.size(); i++) {
-					if (contactName.get(i).equalsIgnoreCase(scanner.nextLine())) {
+					if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
 						System.out.println("Contact phone number: " + contactNumber.get(i));
 						break;
 					} else {
@@ -79,15 +80,30 @@ public class ContactsManager {
 				}
 				break;
 			case 4:
+				System.out.println("Enter contact name: ");
+				searchingContact = scanner.nextLine();
+				scanner.nextLine();
+				for (int i = 0; i < contactName.size(); i++) {
+					if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
+						contactName.remove(i);
+						contactNumber.remove(i);
+						break;
+					} else {
+						System.out.println("we don't know that person");
+					}
+				}
 				writeFile(dataFile, contactName, contactNumber);
 				break;
+				default:
+					readFile(dataFile, contactName, contactNumber);
 		}
+
 	}
 
 	public static void readFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
 		List<String> contacts = Files.readAllLines(dataFile);
 		for (String contact : contacts) {
-			contactName.add(contact.split(" | ")[0]);
+			 contactName.add(contact.split(" | ")[0]);
 			contactNumber.add(contact.split(" | ")[1]);
 		}
 	}
