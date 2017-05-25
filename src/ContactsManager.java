@@ -59,7 +59,8 @@ public class ContactsManager {
 				System.out.println("Enter contact phone number");
 				contactNumber.add(scanner.nextLine());
 
-				System.out.println(contactName.get(0) + contactNumber.get(0));
+//				System.out.println(contactName.get(0) + contactNumber.get(0));
+				writeFile(dataFile, contactName, contactNumber);
 
 //				Creates local variable that contactenates contact info to be passed into the file
 //				String infoToAdd = contactName + " | " + contactNumber;
@@ -78,7 +79,7 @@ public class ContactsManager {
 				}
 				break;
 			case 4:
-				readFile(dataFile, contactName, contactNumber);
+				writeFile(dataFile, contactName, contactNumber);
 				break;
 		}
 	}
@@ -91,7 +92,11 @@ public class ContactsManager {
 		}
 	}
 
-	public static void writeFile(Path dataFile, String infoToAdd) throws IOException {
+	public static void writeFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
+		String infoToAdd = "";
+		for (int i = 0; i < contactName.size(); i++) {
+			infoToAdd += contactName.get(i) + " | " + contactNumber.get(i) + "\n";
+		}
 		Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
 	}
 
