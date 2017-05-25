@@ -49,9 +49,8 @@ public class ContactsManager {
 
 		switch (menuOption) {
 			case 1:
-				List<String> contacts = Files.readAllLines(dataFile);
-				for (String contact : contacts) {
-					System.out.println(contact);
+				for (int i=0; i<contactName.size(); i++) {
+					System.out.println(contactName.get(i) + contactNumber.get(i));
 				}
 				break;
 			case 2:
@@ -101,18 +100,25 @@ public class ContactsManager {
 
 	public static void readFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
 		List<String> contacts = Files.readAllLines(dataFile);
-		for (String contact : contacts) {
-			 contactName.add(contact.split(" | ")[0]);
-			contactNumber.add(contact.split(" | ")[1]);
+		for(int i=0; i<contacts.size(); i++) {
+			String contact = contacts.get(i);
+			contactName.add(contact.substring(0, contact.indexOf("|")+1));
+			contactNumber.add(contact.substring(contact.indexOf("|")+1, contact.length()));
 		}
+//		for (String contact : contacts) {
+//			 contactName.add(contact.split(" | ")[0]);
+//			contactNumber.add(contact.split(" | ")[3]);
+//		}
+//		System.out.println(contacts.size());
 	}
 
 	public static void writeFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
-		String infoToAdd = "";
+		List<String> infoToAdd = new ArrayList<>();
 		for (int i = 0; i < contactName.size(); i++) {
-			infoToAdd += contactName.get(i) + " | " + contactNumber.get(i) + "\n";
+			infoToAdd.add(contactName.get(i) + " | " + contactNumber.get(i));
+			System.out.println(infoToAdd.get(i));
 		}
-		Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
+		Files.write(dataFile, infoToAdd);
 	}
 
 
