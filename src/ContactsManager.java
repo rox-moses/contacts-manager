@@ -85,6 +85,10 @@ public class ContactsManager {
 		return Files.readAllLines(dataFile);
 	}
 
+	public void writeFile(Path dataFile, String infoToAdd) throws IOException {
+		Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
+	}
+
 
 
 }
