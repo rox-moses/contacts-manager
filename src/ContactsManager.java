@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,7 +54,10 @@ public class ContactsManager {
 				System.out.println("Enter contact phone number");
 				int contactNumber = scanner.nextInt();
 				scanner.nextLine();
-				System.out.println(contactName + " " + contactNumber);
+
+//				Creates local variable that contactenates contact info to be passed into the file
+				String infoToAdd = contactName + " | " + contactNumber;
+				Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
 		}
 	}
 
