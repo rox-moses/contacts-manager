@@ -32,17 +32,7 @@ public class ContactsManager {
 
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.println("" +
-				"1. View contacts.\n" +
-				"2. Add a new contact.\n" +
-				"3. Search a contact by name.\n" +
-				"4. Delete an existing contact.\n" +
-				"5. Exit.\n" +
-				"Enter an option (1, 2, 3, 4 or 5):");
-
-
-		int menuOption = scanner.nextInt();
-		scanner.nextLine();
+		int menuOption = menuOptions(scanner);
 		String searchingContact;
 
 		readFile(dataFile, contactName, contactNumber);
@@ -62,7 +52,7 @@ public class ContactsManager {
 //				System.out.println(contactName.get(0) + contactNumber.get(0));
 				writeFile(dataFile, contactName, contactNumber);
 
-//				Creates local variable that contactenates contact info to be passed into the file
+//				Creates local variable that concatenates contact info to be passed into the file
 //				String infoToAdd = contactName + " | " + contactNumber;
 //				Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
 				break;
@@ -71,7 +61,7 @@ public class ContactsManager {
 				searchingContact = scanner.nextLine();
 				for (int i = 0; i < contactName.size(); i++) {
 					if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
-						System.out.println("Contact phone number: " + contactNumber.get(i));
+						printPhoneNumber(contactNumber, i);
 						break;
 					} else {
 						System.out.println("We don't know that person");
@@ -84,14 +74,12 @@ public class ContactsManager {
 				scanner.nextLine();
 				for (int i = 0; i < contactName.size(); i++) {
 					if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
-						contactName.remove(i);
-						contactNumber.remove(i);
+						deleteContact(contactName, contactNumber, i);
 						break;
 					} else {
 						System.out.println("we don't know that person");
 					}
 				}
-				writeFile(dataFile, contactName, contactNumber);
 				break;
 			default:
 				readFile(dataFile, contactName, contactNumber);
@@ -99,6 +87,30 @@ public class ContactsManager {
 				System.out.println("Good bye!");
 				writeFile(dataFile, contactName, contactNumber);
 		}
+	}
+
+	private static void printPhoneNumber(List<String> contactNumber, int i) {
+		System.out.println("Contact phone number: " + contactNumber.get(i));
+	}
+
+	private static void deleteContact(List<String> contactName, List<String> contactNumber, int i) {
+		contactName.remove(i);
+		contactNumber.remove(i);
+	}
+
+	private static int menuOptions(Scanner scanner) {
+		System.out.println("" +
+				"1. View contacts.\n" +
+				"2. Add a new contact.\n" +
+				"3. Search a contact by name.\n" +
+				"4. Delete an existing contact.\n" +
+				"5. Exit.\n" +
+				"Enter an option (1, 2, 3, 4 or 5):");
+
+
+		int menuOption = scanner.nextInt();
+		scanner.nextLine();
+		return menuOption;
 	}
 
 	public static void readFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
