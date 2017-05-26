@@ -44,12 +44,8 @@ public class ContactsManager {
 				}
 				break;
 			case 2:
-				System.out.println("Enter your contacts name:");
-				contactName.add(scanner.nextLine());
-				System.out.println("Enter contact phone number");
-				contactNumber.add(scanner.nextLine());
+				newContact(contactName, contactNumber, scanner);
 
-//				System.out.println(contactName.get(0) + contactNumber.get(0));
 				writeFile(dataFile, contactName, contactNumber);
 
 //				Creates local variable that concatenates contact info to be passed into the file
@@ -59,6 +55,7 @@ public class ContactsManager {
 			case 3:
 				System.out.println("Enter contact name: ");
 				searchingContact = scanner.nextLine();
+				scanner.nextLine();
 				for (int i = 0; i < contactName.size(); i++) {
 					if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
 						printPhoneNumber(contactNumber, i);
@@ -77,7 +74,7 @@ public class ContactsManager {
 						deleteContact(contactName, contactNumber, i);
 						break;
 					} else {
-						System.out.println("we don't know that person");
+						System.out.println("We don't know that person");
 					}
 				}
 				break;
@@ -87,6 +84,13 @@ public class ContactsManager {
 				System.out.println("Good bye!");
 				writeFile(dataFile, contactName, contactNumber);
 		}
+	}
+
+	private static void newContact(List<String> contactName, List<String> contactNumber, Scanner scanner) {
+		System.out.println("Enter your contacts name:");
+		contactName.add(scanner.nextLine());
+		System.out.println("Enter contact phone number");
+		contactNumber.add(scanner.nextLine());
 	}
 
 	private static void printPhoneNumber(List<String> contactNumber, int i) {
@@ -115,8 +119,7 @@ public class ContactsManager {
 
 	public static void readFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
 		List<String> contacts = Files.readAllLines(dataFile);
-		for (int i = 0; i < contacts.size(); i++) {
-			String contact = contacts.get(i);
+		for (String contact : contacts) {
 			contactName.add(contact.substring(0, contact.indexOf("|") - 1));
 			contactNumber.add(contact.substring(contact.indexOf("|") + 2, contact.length()));
 		}
@@ -133,8 +136,6 @@ public class ContactsManager {
 			infoToAdd.add(contactName.get(i) + " | " + contactNumber.get(i));
 			System.out.println(infoToAdd.get(i));
 		}
-		Files.write(dataFile, infoToAdd, StandardOpenOption.APPEND);
+		Files.write(dataFile, infoToAdd);
 	}
-
-
 }
