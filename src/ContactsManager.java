@@ -43,13 +43,13 @@ public class ContactsManager {
 
 		int menuOption = scanner.nextInt();
 		scanner.nextLine();
-		String searchingContact = scanner.nextLine();
+		String searchingContact;
 
 		readFile(dataFile, contactName, contactNumber);
 
 		switch (menuOption) {
 			case 1:
-				for (int i=0; i<contactName.size(); i++) {
+				for (int i = 0; i < contactName.size(); i++) {
 					System.out.println(contactName.get(i) + contactNumber.get(i));
 				}
 				break;
@@ -74,7 +74,7 @@ public class ContactsManager {
 						System.out.println("Contact phone number: " + contactNumber.get(i));
 						break;
 					} else {
-						System.out.println("we don't know that person");
+						System.out.println("We don't know that person");
 					}
 				}
 				break;
@@ -93,17 +93,20 @@ public class ContactsManager {
 				}
 				writeFile(dataFile, contactName, contactNumber);
 				break;
-				default:
-					readFile(dataFile, contactName, contactNumber);
+			default:
+				readFile(dataFile, contactName, contactNumber);
+			case 5:
+				System.out.println("Good bye!");
+				writeFile(dataFile, contactName, contactNumber);
 		}
 	}
 
 	public static void readFile(Path dataFile, List<String> contactName, List<String> contactNumber) throws IOException {
 		List<String> contacts = Files.readAllLines(dataFile);
-		for(int i=0; i<contacts.size(); i++) {
+		for (int i = 0; i < contacts.size(); i++) {
 			String contact = contacts.get(i);
-			contactName.add(contact.substring(0, contact.indexOf("|")+1));
-			contactNumber.add(contact.substring(contact.indexOf("|")+1, contact.length()));
+			contactName.add(contact.substring(0, contact.indexOf("|") - 1));
+			contactNumber.add(contact.substring(contact.indexOf("|") + 2, contact.length()));
 		}
 //		for (String contact : contacts) {
 //			 contactName.add(contact.split(" | ")[0]);
@@ -118,7 +121,7 @@ public class ContactsManager {
 			infoToAdd.add(contactName.get(i) + " | " + contactNumber.get(i));
 			System.out.println(infoToAdd.get(i));
 		}
-		Files.write(dataFile, infoToAdd);
+		Files.write(dataFile, infoToAdd, StandardOpenOption.APPEND);
 	}
 
 
