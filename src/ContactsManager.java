@@ -2,9 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,58 +30,78 @@ public class ContactsManager {
 
 		Scanner scanner = new Scanner(System.in);
 
-		int menuOption = menuOptions(scanner);
-		String searchingContact;
-
 		readFile(dataFile, contactName, contactNumber);
 
+		goToMenu(contactName, contactNumber, dataFile, scanner);
+	}
+
+	private static void goToMenu(List<String> contactName, List<String> contactNumber, Path dataFile, Scanner scanner) throws IOException {
+		int menuOption = menuOptions(scanner);
+		String searchingContact;
+		menuSelector(contactName, contactNumber, dataFile, scanner, menuOption);
+	}
+
+	private static void menuSelector(List<String> contactName, List<String> contactNumber, Path dataFile, Scanner scanner, int menuOption) throws IOException {
+		String searchingContact;
 		switch (menuOption) {
 			case 1:
-				for (int i = 0; i < contactName.size(); i++) {
-					System.out.println(contactName.get(i) + contactNumber.get(i));
-				}
+				printAllContacts(contactName, contactNumber);
 				break;
 			case 2:
 				newContact(contactName, contactNumber, scanner);
-
-				writeFile(dataFile, contactName, contactNumber);
-
-//				Creates local variable that concatenates contact info to be passed into the file
-//				String infoToAdd = contactName + " | " + contactNumber;
-//				Files.write(dataFile, Arrays.asList(infoToAdd), StandardOpenOption.APPEND);
 				break;
 			case 3:
-				System.out.println("Enter contact name: ");
-				searchingContact = scanner.nextLine();
-				scanner.nextLine();
-				for (int i = 0; i < contactName.size(); i++) {
-					if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
-						printPhoneNumber(contactNumber, i);
-						break;
-					} else {
-						System.out.println("We don't know that person");
-					}
-				}
+				searchContacts(contactName, contactNumber, scanner);
 				break;
 			case 4:
-				System.out.println("Enter contact name: ");
-				searchingContact = scanner.nextLine();
-				scanner.nextLine();
-				for (int i = 0; i < contactName.size(); i++) {
-					if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
-						deleteContact(contactName, contactNumber, i);
-						break;
-					} else {
-						System.out.println("We don't know that person");
-					}
-				}
+				deleteContacts(contactName, contactNumber, scanner);
 				break;
+			case 5:
+				exitContacts(contactName, contactNumber, dataFile);
 			default:
 				readFile(dataFile, contactName, contactNumber);
-			case 5:
-				System.out.println("Good bye!");
-				writeFile(dataFile, contactName, contactNumber);
 		}
+	}
+
+	private static void printAllContacts(List<String> contactName, List<String> contactNumber) {
+		for (int i = 0; i < contactName.size(); i++) {
+			System.out.println(contactName.get(i) + contactNumber.get(i));
+		}
+	}
+
+	private static void searchContacts(List<String> contactName, List<String> contactNumber, Scanner scanner) {
+		String searchingContact;
+		System.out.println("Enter contact name: ");
+		searchingContact = scanner.nextLine();
+		for (int i = 0; i < contactName.size(); i++) {
+			if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
+				printPhoneNumber(contactNumber, i);
+				break;
+			} else {
+//						System.out.println("We don't know that person");
+			}
+		}
+	}
+
+	private static void deleteContacts(List<String> contactName, List<String> contactNumber, Scanner scanner) {
+		String searchingContact;
+		System.out.println("Enter contact name: ");
+		searchingContact = scanner.nextLine();
+		for (int i = 0; i < contactName.size(); i++) {
+			if (contactName.get(i).equalsIgnoreCase(searchingContact)) {
+				deleteContact(contactName, contactNumber, i);
+				break;
+			} else {
+//						System.out.println("We don't know that person");
+			}
+		}
+		return;
+	}
+
+	private static void exitContacts(List<String> contactName, List<String> contactNumber, Path dataFile) throws IOException {
+		System.out.println("Good bye!");
+		writeFile(dataFile, contactName, contactNumber);
+		System.exit(0);
 	}
 
 	private static void newContact(List<String> contactName, List<String> contactNumber, Scanner scanner) {
@@ -134,7 +152,6 @@ public class ContactsManager {
 		List<String> infoToAdd = new ArrayList<>();
 		for (int i = 0; i < contactName.size(); i++) {
 			infoToAdd.add(contactName.get(i) + " | " + contactNumber.get(i));
-			System.out.println(infoToAdd.get(i));
 		}
 		Files.write(dataFile, infoToAdd);
 	}
